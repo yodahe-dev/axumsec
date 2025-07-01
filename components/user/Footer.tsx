@@ -25,7 +25,6 @@ import {
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,8 +132,6 @@ const Footer = () => {
                   <a 
                     href={link.href} 
                     className="flex items-center text-gray-400 hover:text-white transition-colors"
-                    onMouseEnter={() => setHoveredItem(`link-${index}`)}
-                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     {link.icon}
                     {link.label}
@@ -165,8 +162,6 @@ const Footer = () => {
                   <a 
                     href="#" 
                     className="text-gray-400 hover:text-white transition-colors flex items-center"
-                    onMouseEnter={() => setHoveredItem(`service-${index}`)}
-                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     <ArrowRight className="w-4 h-4 mr-2 text-red-500" />
                     {service}
@@ -194,8 +189,6 @@ const Footer = () => {
                   <a 
                     href={item.href} 
                     className="flex items-center text-gray-400 hover:text-white transition-colors"
-                    onMouseEnter={() => setHoveredItem(`hunter-${index}`)}
-                    onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item.icon}
                     {item.label}
