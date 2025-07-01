@@ -206,7 +206,7 @@ const Navbar = () => {
               
             </div>
             <span className="font-bold text-2xl tracking-tight">
-              <span className="text-gray-900 dark:text-white">AXUM</span> <span className="text-red-600">SEC yodahe</span>
+              <span className="text-gray-900 dark:text-white">AXUM</span> <span className="text-red-600">SEC</span>
             </span>
           </div>
 
