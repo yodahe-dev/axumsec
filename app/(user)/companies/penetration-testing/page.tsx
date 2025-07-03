@@ -1,4 +1,3 @@
-// app/companies/penetration-testing/page.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -8,7 +7,7 @@ import {
   Bug, Award, User, Zap, Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent} from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const PenetrationTestingPage = () => {

@@ -1,4 +1,3 @@
-// app/why/crowd-sourcing/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -13,7 +12,6 @@ import {
   Search,
   Check,
   ArrowRight,
-  MessageSquare,
   Layout,
   Smartphone,
   Cpu,
@@ -24,7 +22,6 @@ import {
   CardContent, 
   CardHeader, 
   CardTitle, 
-  CardDescription 
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

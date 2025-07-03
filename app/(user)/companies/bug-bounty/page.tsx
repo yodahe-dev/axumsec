@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { 
   Target, Globe, Shield, Zap, BarChart, 
   Gauge, Award, Coins, Eye, BadgeCheck,
-  TestTube2, DollarSign, CalendarCheck, Users
+  TestTube2, DollarSign, CalendarCheck, 
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 

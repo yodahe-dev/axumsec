@@ -1,4 +1,3 @@
-// app/services/source-code/page.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -6,17 +5,14 @@ import {
   Code, 
   ShieldCheck, 
   Search, 
-  Bug, 
   FileText, 
   Lightbulb,
   ArrowRight,
   Clock,
-  Lock,
   BarChart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 
 const SourceCodeAnalysisPage = () => {
