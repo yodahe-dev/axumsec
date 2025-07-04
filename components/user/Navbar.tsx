@@ -18,7 +18,8 @@ import {
   Layers,
   Moon,
   Sun,
-  Home
+  Home,
+  Contact
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -134,13 +135,28 @@ const Navbar = () => {
         { label: 'Request Pen-testers', href: '/hunters/request' },
       ]
     },
+    {
+    label: 'Resources',
+    href: '#',
+    icon: <FileText className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'Blog', href: '/resources/blog' },
+      { label: 'Articles', href: '/resources/articles' },
+      { label: 'Whitepapers', href: '/resources/whitepapers' },
+      { label: 'Policies', href: '/resources/policies' },
+      { label: 'Case Studies', href: '/resources/case-studies' },
+      { label: 'Press Releases', href: '/resources/press' },
+      { label: 'Documentation', href: '/resources/docs' },
+      { label: 'Legal Documents', href: '/resources/legal' },
+      { label: 'FAQ', href: '/resources/faq' },
+    ]
+  },
   ];
 
   // Top navigation items
   const topNavItems = [
-    { label: 'Home', href: '/home', icon: <Home className="w-4 h-4" /> },
-    { label: 'Blog', href: '/blog', icon: <FileText className="w-4 h-4" /> },
-    { label: 'Contact', href: '/contact', icon: <MessageSquare className="w-4 h-4" /> },
+    { label: 'Home', href: '/home', icon: <Home className="w-4 h-4 mr-2" /> },
+    { label: 'Contact', href: '/contact', icon: <Contact className="w-4 h-4 mr-2" /> },
   ];
 
   // Toggle mobile menu
@@ -195,6 +211,7 @@ const Navbar = () => {
       <div className="">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center">
+            <Link href="/" className="flex items-center">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center mr-3">
               <Image 
                 src="/logo.png" 
@@ -208,6 +225,7 @@ const Navbar = () => {
             <span className="font-bold text-2xl tracking-tight">
               <span className="text-gray-900 dark:text-white">AXUM</span> <span className="text-red-600">SEC</span>
             </span>
+            </Link>
           </div>
 
           {/* Top Nav Items */}
