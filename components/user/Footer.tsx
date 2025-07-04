@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -81,7 +81,7 @@ const Footer = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12"
         >
           {/* Company Info */}
-          <motion.div variants={item} className="lg:col-span-2">
+          <motion.div variants={item} className="">
             <div className="flex items-center mb-6">
               <div className="bg-gradient-to-r from-red-600 to-red-800 p-2 rounded-xl mr-3">
                 <Shield className="text-white w-8 h-8" />
@@ -96,9 +96,8 @@ const Footer = () => {
             </p>
             
             <ul className="space-y-3">
-              <li className="flex items-start">
-                <MapPin className="w-5 h-5 text-red-500 mt-0.5 mr-3" />
-                <span>1234 Cyber Street, Addis Ababa, Ethiopia</span>
+              <li className="flex items-start">                
+                <span>Cyber Street, Addis Ababa, Ethiopia</span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-red-500 mr-3" />
@@ -116,13 +115,14 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-white mb-6 pb-2 border-b border-gray-800">Quick Links</h3>
             <ul className="space-y-3">
               {[
-                { label: 'Home', href: '/home', icon: <Home className="w-4 h-4 mr-2" /> },
-                { label: 'Why AXUM SEC', href: '/why', icon: <Shield className="w-4 h-4 mr-2" /> },
-                { label: 'Product & Services', href: '/services', icon: <Layers className="w-4 h-4 mr-2" /> },
+                { label: 'Home', href: '/', icon: <Home className="w-4 h-4 mr-2" /> },
+                { label: 'Why AXUM SEC', href: '/why-axum-sec', icon: <Shield className="w-4 h-4 mr-2" /> },
+                { label: 'Product & Services', href: '/products-services', icon: <Layers className="w-4 h-4 mr-2" /> },
                 { label: 'AXNESS', href: '/axness', icon: <BookOpen className="w-4 h-4 mr-2" /> },
-                { label: 'Solutions', href: '/solutions', icon: <Globe className="w-4 h-4 mr-2" /> },
+                { label: 'Solutions for Industries', href: '/solutions', icon: <Globe className="w-4 h-4 mr-2" /> },
                 { label: 'Blog', href: '/blog', icon: <FileText className="w-4 h-4 mr-2" /> },
                 { label: 'Contact Us', href: '/contact', icon: <Phone className="w-4 h-4 mr-2" /> },
+                { label: 'Get Started', href: '/get-started', icon: <ArrowRight className="w-4 h-4 mr-2" /> },
               ].map((link, index) => (
                 <motion.li 
                   key={index}
@@ -146,13 +146,12 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-white mb-6 pb-2 border-b border-gray-800">Services</h3>
             <ul className="space-y-3">
               {[
-                'Penetration Testing',
-                'Bug Bounty Program',
-                'Vulnerability Disclosure',
-                'Cybersecurity Awareness Training',
-                'Attack Surface Management',
-                '24/7 Support',
-                'Vulnerability Analysis'
+                { label: 'Penetration Testing', href: '/services/penetration-testing' },
+                { label: 'Bug Bounty Program', href: '/services/bug-bounty' },
+                { label: 'Vulnerability Disclosure', href: '/services/vulnerability-disclosure' },
+                { label: 'Cybersecurity Awareness Training', href: '/axness' },
+                { label: 'Attack Surface Management', href: '/services/attack-surface-management' },
+                { label: '24/7 Support', href: '/services/24-7-support' },
               ].map((service, index) => (
                 <motion.li 
                   key={index}
@@ -160,11 +159,11 @@ const Footer = () => {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <a 
-                    href="#" 
+                    href={service.href} 
                     className="text-gray-400 hover:text-white transition-colors flex items-center"
                   >
                     <ArrowRight className="w-4 h-4 mr-2 text-red-500" />
-                    {service}
+                    {service.label}
                   </a>
                 </motion.li>
               ))}
@@ -176,10 +175,10 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-white mb-6 pb-2 border-b border-gray-800">For Hunters</h3>
             <ul className="space-y-3">
               {[
-                { label: 'Join AXUM Crowd', href: '/join', icon: <User className="w-4 h-4 mr-2" /> },
-                { label: 'Careers', href: '/careers', icon: <User className="w-4 h-4 mr-2" /> },
-                { label: 'Request Pen-testers', href: '/request', icon: <Bug className="w-4 h-4 mr-2" /> },
-                { label: 'Hunter Programs', href: '/programs', icon: <Globe className="w-4 h-4 mr-2" /> },
+                { label: 'Join AXUM Crowd', href: '/join-axum-crowd', icon: <User className="w-4 h-4 mr-2" /> },
+                { label: 'Be AXUM SEC Team', href: '/careers', icon: <User className="w-4 h-4 mr-2" /> },
+                { label: 'Request Pen-Testers', href: '/request-pen-testers', icon: <Bug className="w-4 h-4 mr-2" /> },
+                { label: 'Hunter Programs', href: '/hunter-programs', icon: <Globe className="w-4 h-4 mr-2" /> },
               ].map((item, index) => (
                 <motion.li 
                   key={index}
@@ -196,36 +195,34 @@ const Footer = () => {
                 </motion.li>
               ))}
             </ul>
-            
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-white mb-4">Stay Updated</h3>
-              <form onSubmit={handleSubmit} className="flex flex-col">
-                <div className="relative">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500 pr-12"
-                    required
-                  />
-                  <button 
-                    type="submit"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors"
+          </motion.div>
+
+          {/* Legal & Newsletter */}
+          <motion.div variants={item}>
+            {/* Legal Section */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 pb-2 border-b border-gray-800">Legal</h3>
+              <ul className="space-y-3">
+                {[
+                  { label: 'Privacy Policy', href: '/privacy-policy' },
+                  { label: 'Terms of Service', href: '/terms' },
+                  { label: 'Cookies Policy', href: '/cookies' },
+                ].map((legal, index) => (
+                  <motion.li 
+                    key={index}
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                   >
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </div>
-                {submitted && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 text-green-400 text-sm"
-                  >
-                    Subscribed successfully!
-                  </motion.p>
-                )}
-              </form>
+                    <a 
+                      href={legal.href} 
+                      className="text-gray-400 hover:text-white transition-colors flex items-center"
+                    >
+                      <ArrowRight className="w-4 h-4 mr-2 text-red-500" />
+                      {legal.label}
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
             </div>
           </motion.div>
         </motion.div>
@@ -236,17 +233,9 @@ const Footer = () => {
               <p className="text-gray-500 text-sm">
                 © 2025 AXUM SEC. All Rights Reserved.
               </p>
-              <div className="flex space-x-4 mt-2">
-                {['Privacy Policy', 'Terms of Service', 'Cookies Policy'].map((item, index) => (
-                  <a 
-                    key={index} 
-                    href="#" 
-                    className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
-                  >
-                    {item}
-                  </a>
-                ))}
-              </div>
+              <p className="text-gray-500 text-sm mt-2">
+                Website design and development by [Design Company Name], powered by [Technology/Platform].
+              </p>
             </div>
 
             <div className="flex items-center space-x-6">
