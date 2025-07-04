@@ -104,7 +104,7 @@ const navItems = [
       { label: 'API Security Pentesting', href: '/services/api-pentesting' },
       { label: 'Source Code Analysis', href: '/services/source-code' },
       { label: 'Cybersecurity Awareness Training', href: '/services/awareness-training' },
-      { label: 'Attack Surface Management', href: '/services/attack-surface' },
+      { label: 'Attack Surface Management', href: '/services/attacksurface' },
       { label: '24/7 Support', href: '/services/support' },
     ]
   },
