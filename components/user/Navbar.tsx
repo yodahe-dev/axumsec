@@ -81,77 +81,81 @@ const Navbar = () => {
   }, [activeDropdown]);
 
   // Navigation items
-  const navItems = [
-    {
-      label: 'Why Axum SEC',
-      href: '#',
-      icon: <Shield className="w-4 h-4 mr-2" />,
-      dropdown: [
-        { label: 'Axum Crowd Sourcing', href: '/why/crowd-sourcing' },
-        { label: 'How Axum SEC is Different', href: '/why/different' },
-        { label: 'Our Partners', href: '/why/partners' },
-      ]
-    },
-    {
-      label: 'Product & Services',
-      href: '#',
-      icon: <Layers className="w-4 h-4 mr-2" />,
-      dropdown: [
-        { label: 'PTaaS (Penetration Testing)', href: '/services/ptaas' },
-        { label: 'Web Application Pentesting', href: '/services/web-pentesting' },
-        { label: 'Mobile Application Pentesting', href: '/services/mobile-pentesting' },
-        { label: 'Network Security Pentesting', href: '/services/network-pentesting' },
-        { label: 'API Security Pentesting', href: '/services/api-pentesting' },
-        { label: 'Source Code Analysis', href: '/services/source-code' },
-      ]
-    },
-    {
-      label: 'Solutions',
-      href: '#',
-      icon: <BookOpen className="w-4 h-4 mr-2" />,
-      dropdown: [
-        { label: 'Security Companies', href: '/industries/security' },
-        { label: 'Financial Services', href: '/industries/financial' },
-        { label: 'Healthcare', href: '/industries/healthcare' },
-      ]
-    },
-    {
-      label: 'For Companies',
-      href: '#',
-      icon: <Globe className="w-4 h-4 mr-2" />,
-      dropdown: [
-        { label: 'Get Penetration Testing', href: '/companies/penetration-testing' },
-        { label: 'Start Bug Bounty Program', href: '/companies/bug-bounty' },
-        { label: 'Vulnerability Disclosure', href: '/companies/vdp' },
-      ]
-    },
-    {
-      label: 'For Hunters',
-      href: '#',
-      icon: <Bug className="w-4 h-4 mr-2" />,
-      dropdown: [
-        { label: 'Join Axum Crowd', href: '/hunters/join' },
-        { label: 'Careers', href: '/hunters/careers' },
-        { label: 'Request Pen-testers', href: '/hunters/request' },
-      ]
-    },
-    {
+const navItems = [
+  {
+    label: 'Why Axum SEC',
+    href: '#',
+    icon: <Shield className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'Axum Crowd Sourcing', href: '/why/crowd-sourcing' },
+      { label: 'How Axum SEC is Different', href: '/why/different' },
+      { label: 'Our Partners', href: '/why/partners' },
+    ]
+  },
+  {
+    label: 'Product & Services',
+    href: '#',
+    icon: <Layers className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'PTaaS (Penetration Testing)', href: '/services/ptaas' },
+      { label: 'Web Application Pentesting', href: '/services/web-pentesting' },
+      { label: 'Mobile Application Pentesting', href: '/services/mobile-pentesting' },
+      { label: 'Network Security Pentesting', href: '/services/network-pentesting' },
+      { label: 'API Security Pentesting', href: '/services/api-pentesting' },
+      { label: 'Source Code Analysis', href: '/services/source-code' },
+      { label: 'Cybersecurity Awareness Training', href: '/services/awareness-training' },
+      { label: 'Attack Surface Management', href: '/services/attack-surface' },
+      { label: '24/7 Support', href: '/services/support' },
+    ]
+  },
+  {
+    label: 'Solutions',
+    href: '#',
+    icon: <BookOpen className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'Security Companies', href: '/industries/security' },
+      { label: 'Financial Services', href: '/industries/financial' },
+      { label: 'Healthcare', href: '/industries/healthcare' },
+    ]
+  },
+  {
+    label: 'For Companies',
+    href: '#',
+    icon: <Globe className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'Get Penetration Testing', href: '/companies/penetration-testing' },
+      { label: 'Start Bug Bounty Program', href: '/companies/bug-bounty' },
+      { label: 'Vulnerability Disclosure', href: '/companies/vdp' },
+    ]
+  },
+  {
+    label: 'For Hunters',
+    href: '#',
+    icon: <Bug className="w-4 h-4 mr-2" />,
+    dropdown: [
+      { label: 'Join Axum Crowd', href: '/hunters/join' },
+      { label: 'Careers', href: '/hunters/careers' },
+      { label: 'Request Pen-testers', href: '/hunters/request' },
+    ]
+  },
+  {
     label: 'Resources',
     href: '#',
     icon: <FileText className="w-4 h-4 mr-2" />,
     dropdown: [
       { label: 'Blog', href: '/resources/blog' },
-      { label: 'Articles', href: '/resources/articles' },
-      { label: 'Whitepapers', href: '/resources/whitepapers' },
-      { label: 'Policies', href: '/resources/policies' },
-      { label: 'Case Studies', href: '/resources/case-studies' },
-      { label: 'Press Releases', href: '/resources/press' },
-      { label: 'Documentation', href: '/resources/docs' },
-      { label: 'Legal Documents', href: '/resources/legal' },
-      { label: 'FAQ', href: '/resources/faq' },
+      // { label: 'Articles', href: '/resources/articles' },
+      // { label: 'Whitepapers', href: '/resources/whitepapers' },
+      // { label: 'Policies', href: '/resources/policies' },
+      // { label: 'Case Studies', href: '/resources/case-studies' },
+      // { label: 'Press Releases', href: '/resources/press' },
+      // { label: 'Documentation', href: '/resources/docs' },
+      // { label: 'Legal Documents', href: '/resources/legal' },
+      // { label: 'FAQ', href: '/resources/faq' },
     ]
   },
-  ];
+];
+
 
   // Top navigation items
   const topNavItems = [
