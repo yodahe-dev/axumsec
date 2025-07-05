@@ -1,4 +1,3 @@
-// components/user/Hero.tsx
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,15 +9,12 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-// Dynamically import Typewriter for code splitting
 const Typewriter = dynamic(() => import('typewriter-effect'), { ssr: false });
 
-// Define type for typewriter step
 type TypewriterStep = {
   type: string;
 };
 
-// Extend TypewriterClass to include additional methods
 interface CustomTypewriterClass {
   deleteAll: (speed?: number) => CustomTypewriterClass;
   typeString: (str: string) => CustomTypewriterClass;
@@ -27,7 +23,6 @@ interface CustomTypewriterClass {
   changeDelay: (delay: number) => CustomTypewriterClass;
 }
 
-// Type for event handlers to avoid explicit any
 type TypewriterEventHandlers = {
   onStart?: () => void;
   onStop?: () => void;
@@ -44,7 +39,6 @@ const Hero = () => {
   const soundTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const typewriterActiveRef = useRef(false);
   
-  // Initialize audio with preload
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const audioElement = new Audio('/keyboardtyping.mp3');
@@ -64,12 +58,10 @@ const Hero = () => {
     }
   }, []);
 
-  // Auto-enable sound after user interaction
   useEffect(() => {
     if (!audio || soundEnabled) return;
 
     const handleUserInteraction = () => {
-      // Try to play silently to unlock audio context
       audio.play().then(() => {
         audio.pause();
         audio.currentTime = 0;
@@ -78,7 +70,6 @@ const Hero = () => {
         setSoundEnabled(false);
       });
       
-      // Remove event listeners after first interaction
       window.removeEventListener('click', handleUserInteraction);
       window.removeEventListener('touchstart', handleUserInteraction);
     };
@@ -92,19 +83,16 @@ const Hero = () => {
     };
   }, [audio, soundEnabled]);
 
-  // Handle sound playback
   const toggleSound = () => {
     if (!audio) return;
     
     if (soundEnabled) {
-      // Turning off
       setSoundEnabled(false);
       if (isPlaying) {
         audio.pause();
         setIsPlaying(false);
       }
     } else {
-      // Turning on
       setSoundEnabled(true);
       if (typewriterActiveRef.current && !isPlaying) {
         startSound();
@@ -132,14 +120,13 @@ const Hero = () => {
       audio.pause();
       setIsPlaying(false);
     } else {
-      // Graceful fade-out
       const fadeOut = () => {
         if (audio.volume > 0.05) {
           audio.volume = Math.max(0, audio.volume - 0.05);
           soundTimeoutRef.current = setTimeout(fadeOut, 50);
         } else {
           audio.pause();
-          audio.volume = 0.2; // Reset volume
+          audio.volume = 0.2; 
           setIsPlaying(false);
         }
       };
@@ -147,7 +134,6 @@ const Hero = () => {
     }
   };
 
-  // Handle typewriter events
   const handleTypewriterStart = () => {
     typewriterActiveRef.current = true;
     startSound();
@@ -170,21 +156,18 @@ const Hero = () => {
     }
   };
 
-  // Handle typewriter initialization
   const handleTypewriterInit = (typewriter: CustomTypewriterClass) => {
     typewriter
       .changeDelay(80)
       .start();
   };
 
-  // Animate when in view
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
     }
   }, [controls, isInView]);
 
-  // Animation variants for text elements
   const container = {
     hidden: { opacity: 0 },
     visible: {
@@ -208,7 +191,6 @@ const Hero = () => {
     }
   };
 
-  // Cybersecurity services
   const cyberServices = [
     { icon: <Lock className="w-5 h-5" />, text: "Penetration Testing" },
     { icon: <Server className="w-5 h-5" />, text: "Vulnerability Assessments" },
@@ -218,7 +200,6 @@ const Hero = () => {
     { icon: <Shield className="w-5 h-5" />, text: "Vulnerability Disclosure" }
   ];
 
-  // Create event handlers object with explicit type
   const typewriterEventHandlers: TypewriterEventHandlers = {
     onStart: handleTypewriterStart,
     onStop: handleTypewriterStop,
@@ -230,7 +211,6 @@ const Hero = () => {
       ref={ref}
       className="relative pb-20 w-full max-h-[600px] min-h-[500px] flex items-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950"
     >
-      {/* Subtle background particles */}
       <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
         {[...Array(15)].map((_, i) => (
           <motion.div
@@ -257,7 +237,6 @@ const Hero = () => {
         ))}
       </div>
       
-      {/* Glowing accent */}
       <motion.div 
         className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-red-500/10 rounded-full blur-[100px] pointer-events-none z-0"
         animate={{
@@ -271,16 +250,13 @@ const Hero = () => {
         }}
       />
       
-      {/* Main content container */}
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex">
-        {/* Left column - text content */}
         <motion.div
           variants={container}
           initial="hidden"
           animate={controls}
           className="w-full lg:w-1/2 pr-0 lg:pr-12 flex flex-col justify-center py-10"
         >
-          {/* Badge */}
           <motion.div
             variants={item}
             className="mb-5"
@@ -291,7 +267,6 @@ const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             variants={item}
             className="text-4xl md:text-5xl font-bold tracking-tight mb-5 text-gray-900 dark:text-white"
@@ -315,12 +290,10 @@ const Hero = () => {
                 cursor: '',
               }}
               onInit={handleTypewriterInit}
-              // Use typed event handlers
               {...typewriterEventHandlers}
             />
           </motion.h1>
 
-          {/* Subheading */}
           <motion.p
             variants={item}
             className="text-lg text-gray-700 dark:text-gray-300 mb-6 max-w-lg"
@@ -335,7 +308,6 @@ const Hero = () => {
             Our comprehensive range of cybersecurity services and products empower organizations to enhance their cybersecurity posture and protect their valuable digital assets.
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div
             variants={item}
             className="flex flex-wrap gap-4 mb-8"
@@ -356,7 +328,6 @@ const Hero = () => {
               </div>
             </Button>
             
-            {/* Sound toggle */}
             <Button 
               variant="ghost" 
               className="rounded-full p-3"
@@ -377,7 +348,6 @@ const Hero = () => {
             </Button>
           </motion.div>
 
-          {/* Services grid */}
           <motion.div
             variants={container}
             className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-xl"
@@ -397,10 +367,8 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right column - cybersecurity visualization */}
         <div className="hidden lg:flex lg:w-1/2 items-center justify-center pl-10">
           <div className="relative w-full h-[500px]">
-            {/* Main shield */}
             <motion.div 
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               animate={{ 
@@ -422,7 +390,6 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* Floating security icons */}
             {[
               { icon: <Lock className="w-8 h-8 text-red-500" />, angle: 0, distance: 160 },
               { icon: <Server className="w-8 h-8 text-red-500" />, angle: 60, distance: 160 },
@@ -461,7 +428,6 @@ const Hero = () => {
               </motion.div>
             ))}
 
-            {/* Pulsing rings */}
             <motion.div
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-red-500/20 rounded-full"
               animate={{
@@ -494,7 +460,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scrolling indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10">
         <ChevronRight className="w-5 h-5 text-gray-400 rotate-90" />
         <div className="text-xs text-gray-500 mt-1">Scroll to explore</div>
