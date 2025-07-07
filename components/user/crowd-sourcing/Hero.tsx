@@ -5,41 +5,62 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 export default function Hero() {
   const [heroTitle, setHeroTitle] = useState('');
   const [heroSubtitle, setHeroSubtitle] = useState('');
   const [heroBadge, setHeroBadge] = useState('');
+  const [overviewPoints, setOverviewPoints] = useState<string[]>([]);
 
   useEffect(() => {
-    async function fetchHeroContent() {
+    async function fetchHeroData() {
       try {
-        const res = await fetch('http://localhost:1337/api/content-type-builder/content-types');
-        const json = await res.json();
+        // Step 1: Try to load real saved content
+        const contentRes = await axios.get(
+          'http://localhost:1337/api/crowd-sourcing?populate[overviewTraditionalSecurity][populate]=*'
+        );
+        const contentData = contentRes?.data?.data;
 
-        // Find content type that contains heroTitle field
-        const heroSchema = json?.data?.find((item: any) =>
-          item?.schema?.attributes?.heroTitle
-        )?.schema?.attributes;
+        if (contentData) {
+          // If values exist, use them
+          if (contentData.heroTitle) setHeroTitle(contentData.heroTitle);
+          if (contentData.heroSubtitle) setHeroSubtitle(contentData.heroSubtitle);
+          if (contentData.heroBadge) setHeroBadge(contentData.heroBadge);
 
-        if (heroSchema) {
-          // Only set if the value is available (so default can apply)
-          if (heroSchema.heroTitle?.default) {
-            setHeroTitle(heroSchema.heroTitle.default);
-          }
-          if (heroSchema.heroSubtitle?.default) {
-            setHeroSubtitle(heroSchema.heroSubtitle.default);
-          }
-          if (heroSchema.heroBadge?.default) {
-            setHeroBadge(heroSchema.heroBadge.default);
+          const points = contentData.overviewTraditionalSecurity?.map(
+            (item: any) => item.description
+          );
+          if (points?.length) setOverviewPoints(points);
+        }
+
+        // Step 2: If missing any value, get defaults from schema
+        if (!contentData.heroTitle || !contentData.heroSubtitle || !contentData.heroBadge) {
+          const schemaRes = await axios.get(
+            'http://localhost:1337/api/content-type-builder/content-types'
+          );
+          const heroSchema = schemaRes?.data?.data?.find((item: any) =>
+            item?.schema?.attributes?.heroTitle
+          )?.schema?.attributes;
+
+          if (heroSchema) {
+            if (!contentData.heroTitle && heroSchema.heroTitle?.default) {
+              setHeroTitle(heroSchema.heroTitle.default);
+            }
+            if (!contentData.heroSubtitle && heroSchema.heroSubtitle?.default) {
+              setHeroSubtitle(heroSchema.heroSubtitle.default);
+            }
+            if (!contentData.heroBadge && heroSchema.heroBadge?.default) {
+              setHeroBadge(heroSchema.heroBadge.default);
+            }
           }
         }
       } catch (error) {
-        console.error('Error fetching hero data:', error);
+        console.error('Error loading hero data:', error);
       }
     }
 
-    fetchHeroContent();
+    fetchHeroData();
   }, []);
 
   return (
