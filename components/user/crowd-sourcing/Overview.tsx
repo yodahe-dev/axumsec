@@ -10,24 +10,22 @@ export default function Overview() {
   const [traditionalSecurityPoints, setTraditionalSecurityPoints] = useState<string[]>([]);
   const [crowdSourcingPoints, setCrowdSourcingPoints] = useState<string[]>([]);
 
-  // Default description as fallback
   const defaultDescription =
     "AXUM SEC's crowd-sourcing model harnesses the collective power of ethical hackers from around the world to identify and mitigate vulnerabilities in your digital infrastructure. By connecting businesses with skilled cybersecurity professionals, AXUM SEC offers a dynamic, flexible, and scalable approach to security that adapts to the ever-evolving threat landscape.";
 
   useEffect(() => {
     async function fetchOverviewData() {
       try {
-        // Fetch crowd-sourcing main data + overviewTraditionalSecurity
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
         const res = await axios.get(
-          'http://localhost:1337/api/crowd-sourcing?populate[overviewTraditionalSecurity][populate]=*&populate[overviewCrowdSourcing][populate]=*'
+          `${API_URL}/api/crowd-sourcing?populate[overviewTraditionalSecurity][populate]=*&populate[overviewCrowdSourcing][populate]=*`
         );
         const data = res?.data?.data;
 
         if (data) {
-          // Overview title fallback
           setOverviewTitle(data.overviewTitle || 'Overview');
 
-          // Extract plain text from overviewDescription blocks
           if (Array.isArray(data.overviewDescription) && data.overviewDescription.length > 0) {
             const plainText = data.overviewDescription
               .map((block: any) =>
@@ -39,7 +37,6 @@ export default function Overview() {
             setOverviewDescription(defaultDescription);
           }
 
-          // overviewTraditionalSecurity descriptions array
           if (Array.isArray(data.overviewTraditionalSecurity)) {
             setTraditionalSecurityPoints(
               data.overviewTraditionalSecurity.map((item: any) => item.description)
@@ -48,7 +45,6 @@ export default function Overview() {
             setTraditionalSecurityPoints([]);
           }
 
-          // overviewCrowdSourcing descriptions array
           if (Array.isArray(data.overviewCrowdSourcing)) {
             setCrowdSourcingPoints(
               data.overviewCrowdSourcing.map((item: any) => item.description)
@@ -57,7 +53,6 @@ export default function Overview() {
             setCrowdSourcingPoints([]);
           }
         } else {
-          // fallback defaults
           setOverviewDescription(defaultDescription);
           setTraditionalSecurityPoints([]);
           setCrowdSourcingPoints([]);

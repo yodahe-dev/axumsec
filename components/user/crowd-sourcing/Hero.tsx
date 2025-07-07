@@ -16,14 +16,14 @@ export default function Hero() {
   useEffect(() => {
     async function fetchHeroData() {
       try {
-        // Step 1: Try to load real saved content
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
         const contentRes = await axios.get(
-          'http://localhost:1337/api/crowd-sourcing?populate[overviewTraditionalSecurity][populate]=*'
+          `${API_URL}/api/crowd-sourcing?populate[overviewTraditionalSecurity][populate]=*`
         );
         const contentData = contentRes?.data?.data;
 
         if (contentData) {
-          // If values exist, use them
           if (contentData.heroTitle) setHeroTitle(contentData.heroTitle);
           if (contentData.heroSubtitle) setHeroSubtitle(contentData.heroSubtitle);
           if (contentData.heroBadge) setHeroBadge(contentData.heroBadge);
@@ -34,10 +34,9 @@ export default function Hero() {
           if (points?.length) setOverviewPoints(points);
         }
 
-        // Step 2: If missing any value, get defaults from schema
         if (!contentData.heroTitle || !contentData.heroSubtitle || !contentData.heroBadge) {
           const schemaRes = await axios.get(
-            'http://localhost:1337/api/content-type-builder/content-types'
+            `${API_URL}/api/content-type-builder/content-types`
           );
           const heroSchema = schemaRes?.data?.data?.find((item: any) =>
             item?.schema?.attributes?.heroTitle
