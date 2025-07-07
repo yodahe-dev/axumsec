@@ -1,8 +1,13 @@
+// Path: ./next.config.ts
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true, // ✅ skip ESLint during `next build`
+  /* config options here */
+
+  // Allow images from localhost
+  images: {
+    domains: ["localhost"],
   },
 };
 
