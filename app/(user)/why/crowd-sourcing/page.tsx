@@ -1,13 +1,13 @@
 'use client';
-import Hero from '@/components/user/crowd-sourcing/Hero';
-import Overview from '@/components/user/crowd-sourcing/Overview';
-import Crowd from '@/components/user/crowd-sourcing/Crowd';
-import Step from '@/components/user/crowd-sourcing/Step';
-import CaseStudies from '@/components/user/crowd-sourcing/CaseStudies';
-import Benefits from '@/components/user/crowd-sourcing/Benefits';
-import Testimonials from '@/components/user/crowd-sourcing/Testimonials';
-import Faq from '@/components/user/crowd-sourcing/Faq';
-import FinalCTA from '@/components/user/crowd-sourcing/FinalCTA';
+import Hero from '@/app/(user)/why/crowd-sourcing/components/Hero';
+import Overview from '@/app/(user)/why/crowd-sourcing/components/Overview';
+import Crowd from '@/app/(user)/why/crowd-sourcing/components/Crowd';
+import Step from '@/app/(user)/why/crowd-sourcing/components/Step';
+import CaseStudies from '@/app/(user)/why/crowd-sourcing/components/CaseStudies';
+import Benefits from '@/app/(user)/why/crowd-sourcing/components/Benefits';
+import Testimonials from '@/app/(user)/why/crowd-sourcing/components/Testimonials';
+import Faq from '@/app/(user)/why/crowd-sourcing/components/Faq';
+import FinalCTA from '@/app/(user)/why/crowd-sourcing/components/FinalCTA';
 
 const CrowdSourcingPage = () => {
   return (
