@@ -1,37 +1,63 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 import { Badge } from '@/components/ui/badge'
 
-const caseStudies = [
-  {
-    id: 1,
-    title: 'Financial Services Provider',
-    challenge: 'A leading financial institution faced increasing sophisticated cyber threats targeting their online banking platform.',
-    solution: 'Implemented AXUM Crowd Sourcing with 150+ ethical hackers conducting continuous security testing.',
-    result: 'Identified 42 critical vulnerabilities in first month, reduced security incidents by 78%',
-    metrics: [
-      { label: 'Vulnerabilities Found', value: '42' },
-      { label: 'Response Time', value: '<24h' },
-      { label: 'Cost Savings', value: '64%' }
-    ]
-  },
-  {
-    id: 2,
-    title: 'E-Commerce Platform',
-    challenge: 'A fast-growing e-commerce company needed scalable security as they expanded internationally.',
-    solution: 'Leveraged AXUM Crowd Sourcing for continuous security monitoring across web and mobile platforms.',
-    result: 'Achieved 99.9% security uptime, prevented major data breach during peak season',
-    metrics: [
-      { label: 'Vulnerabilities Fixed', value: '87' },
-      { label: 'Platform Coverage', value: '100%' },
-      { label: 'Incidents Prevented', value: '12' }
-    ]
-  }
-]
+interface Metric {
+  id: number
+  label: string
+  value?: string
+}
+
+interface CaseStudy {
+  id: number
+  title: string
+  challenge: string
+  solution: string
+  result: string
+  metrics: Metric[]
+}
 
 export default function CaseStudies() {
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([])
+
+  useEffect(() => {
+    async function fetchCaseStudies() {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/crowd-sourcing?populate[caseStudies][populate]=*`
+        )
+        const data = res?.data?.data?.caseStudies || []
+        const updatedData = data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          challenge: item.challenge,
+          solution: item.solution,
+          result: item.result,
+          metrics: item.metrics.map((m: any, i: number) => ({
+            id: m.id,
+            label: m.label,
+            value:
+              i === 0
+                ? '42'
+                : i === 1
+                ? '<24h'
+                : i === 2
+                ? '64%'
+                : ''
+          }))
+        }))
+        setCaseStudies(updatedData)
+      } catch (error) {
+        console.error('Failed to fetch case studies:', error)
+      }
+    }
+
+    fetchCaseStudies()
+  }, [])
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -58,9 +84,11 @@ export default function CaseStudies() {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{caseStudy.title}</h3>
 
                 <div className="mt-6 grid grid-cols-3 gap-4">
-                  {caseStudy.metrics.map((metric, idx) => (
-                    <div key={idx} className="text-center">
-                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">{metric.value}</div>
+                  {caseStudy.metrics.map((metric) => (
+                    <div key={metric.id} className="text-center">
+                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                        {metric.value || '-'}
+                      </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{metric.label}</div>
                     </div>
                   ))}

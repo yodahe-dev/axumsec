@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import {
   Accordion,
@@ -8,31 +8,34 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import axios from 'axios'
 
-const faqs = [
-  {
-    question: 'What is AXUM Crowd Sourcing?',
-    answer:
-      'AXUM Crowd Sourcing is a platform that connects organizations with a global network of ethical hackers to crowdsource cybersecurity testing and vulnerability discovery.',
-  },
-  {
-    question: 'How does AXUM SEC ensure the security of my data?',
-    answer:
-      'All testing is conducted in a secure, isolated environment, with strict confidentiality agreements and secure data handling protocols.',
-  },
-  {
-    question: 'What types of vulnerabilities can be discovered?',
-    answer:
-      'The platform can uncover a wide range of vulnerabilities, including those related to web applications, mobile apps, networks, APIs, and more.',
-  },
-  {
-    question: 'How are ethical hackers compensated?',
-    answer:
-      'Ethical hackers are compensated based on the vulnerabilities they discover and the value of their findings, with options for payment in multiple currencies.',
-  },
-]
+interface FaqItem {
+  id: number
+  question: string
+  answer: string
+}
 
 export default function Faq() {
+  const [faqs, setFaqs] = useState<FaqItem[]>([])
+
+  useEffect(() => {
+    async function fetchFaqs() {
+      try {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL
+        const res = await axios.get(
+          `${API_URL}/api/crowd-sourcing?populate[faqs][populate]=*`
+        )
+        const fetchedFaqs = res?.data?.data?.faqs || []
+        setFaqs(fetchedFaqs)
+      } catch (error) {
+        console.error('Failed to fetch FAQs:', error)
+      }
+    }
+
+    fetchFaqs()
+  }, [])
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -53,20 +56,24 @@ export default function Faq() {
           </div>
 
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="border-b border-gray-200 dark:border-gray-700"
-              >
-                <AccordionTrigger className="text-lg font-medium py-4 hover:no-underline">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-gray-700 dark:text-gray-300 pb-4">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+            {faqs.length > 0 ? (
+              faqs.map((faq) => (
+                <AccordionItem
+                  key={faq.id}
+                  value={`item-${faq.id}`}
+                  className="border-b border-gray-200 dark:border-gray-700"
+                >
+                  <AccordionTrigger className="text-lg font-medium py-4 hover:no-underline">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-700 dark:text-gray-300 pb-4">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 dark:text-gray-400">Loading FAQs...</p>
+            )}
           </Accordion>
         </div>
       </div>
