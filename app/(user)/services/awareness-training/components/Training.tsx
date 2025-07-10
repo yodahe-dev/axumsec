@@ -2,122 +2,174 @@
 
 import { motion } from "framer-motion";
 import { 
-  Shield, BookOpen, Monitor, Users, DollarSign, BarChart, CheckCircle,
+  Shield, Monitor, Users, CheckCircle,
   Lock, Key, Mail, UserCog, 
   AlertCircle, Code, Award, BadgeCheck,
-  Calendar, ArrowRight, FileText, 
   GraduationCap, Briefcase, ClipboardCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import axios from "axios";
+import { useEffect, useState, useMemo } from "react";
 
+// Type definitions
+type RichText = {
+  type: string;
+  children: { type: string; text: string }[];
+};
 
-  const onlineCourses = [
-    {
-      icon: <Mail className="w-8 h-8 text-red-500" />,
-      title: "Phishing Awareness",
-      description: "Recognize and avoid phishing attacks used to steal sensitive information."
-    },
-    {
-      icon: <Key className="w-8 h-8 text-red-500" />,
-      title: "Secure Password Practices",
-      description: "Create and manage strong passwords with best practices."
-    },
-    {
-      icon: <Lock className="w-8 h-8 text-red-500" />,
-      title: "Data Protection and Privacy",
-      description: "Handle sensitive information securely with proper protocols."
-    },
-    {
-      icon: <UserCog className="w-8 h-8 text-red-500" />,
-      title: "Social Engineering Defense",
-      description: "Defend against human-based attacks and manipulation tactics."
-    },
-    {
-      icon: <AlertCircle className="w-8 h-8 text-red-500" />,
-      title: "Incident Response Basics",
-      description: "Recognize, report, and respond to potential security incidents."
+type CourseOffering = {
+  id: number;
+  title: string;
+  description: RichText[];
+  icon: string | null;
+};
+
+type FeatureItem = {
+  id: number;
+  list: string;
+};
+
+type TrainingTab = {
+  id: number;
+  title: string;
+  description: string;
+  TabsNumber: string;
+  CourseOfferings: CourseOffering[];
+  featuretab1: FeatureItem[];
+};
+
+type TrainingData = {
+  tabs: {
+    Tabs: TrainingTab[];
+  };
+};
+
+// Icon mapping
+const iconMap = {
+  Mail: Mail,
+  Key: Key,
+  Lock: Lock,
+  UserCog: UserCog,
+  AlertCircle: AlertCircle,
+  ClipboardCheck: ClipboardCheck,
+  Briefcase: Briefcase,
+  Shield: Shield,
+  GraduationCap: GraduationCap,
+  BadgeCheck: BadgeCheck,
+  Code: Code,
+  Award: Award
+};
+
+// Helper to extract text from rich text
+const getPlainText = (richText: RichText[]): string => {
+  if (!richText || !Array.isArray(richText)) return '';
+  return richText.map(item => {
+    if (item.children) {
+      return item.children.map(child => child.text).join('');
     }
-  ];
-
-  const onsiteTrainings = [
-    {
-      icon: <ClipboardCheck className="w-8 h-8 text-red-500" />,
-      title: "Customized Workshops",
-      description: "Tailored sessions addressing your organization's unique security challenges."
-    },
-    {
-      icon: <Briefcase className="w-8 h-8 text-red-500" />,
-      title: "Executive Briefings",
-      description: "Strategic sessions for leadership on cybersecurity and culture building."
-    },
-    {
-      icon: <Shield className="w-8 h-8 text-red-500" />,
-      title: "Incident Response Drills",
-      description: "Simulated exercises preparing teams for real-world security incidents."
-    },
-    {
-      icon: <GraduationCap className="w-8 h-8 text-red-500" />,
-      title: "Role-Specific Training",
-      description: "Targeted training for IT, HR, customer service, and other departments."
-    }
-  ];
-
-  const certifications = [
-    {
-      icon: <BadgeCheck className="w-8 h-8 text-red-500" />,
-      title: "CCAP",
-      name: "Certified Cybersecurity Awareness Professional",
-      description: "Fundamental cybersecurity knowledge for all employees."
-    },
-    {
-      icon: <Shield className="w-8 h-8 text-red-500" />,
-      title: "CIRS",
-      name: "Certified Incident Response Specialist",
-      description: "Managing and responding to cybersecurity incidents effectively."
-    },
-    {
-      icon: <Code className="w-8 h-8 text-red-500" />,
-      title: "CSDP",
-      name: "Certified Secure Development Practitioner",
-      description: "Secure coding practices and integrating security in development."
-    },
-    {
-      icon: <UserCog className="w-8 h-8 text-red-500" />,
-      title: "CSEDS",
-      name: "Certified Social Engineering Defense Specialist",
-      description: "Recognizing and mitigating human-based security threats."
-    }
-  ];
-
-  const onlineFeatures = [
-    "Flexible Learning: Learn at your own pace and schedule",
-    "Interactive Modules: Engaging content for better retention",
-    "Regular Updates: Always current with the latest threats",
-    "Progress Tracking: Monitor employee training completion"
-  ];
-
-  const onsiteFeatures = [
-    "Tailored Content: Customized to your organization's needs",
-    "Interactive Learning: Hands-on exercises and scenarios",
-    "Expert Trainers: Practical knowledge from cybersecurity professionals",
-    "Team Building: Fosters collaboration and security culture"
-  ];
-
-  const certificationFeatures = [
-    "Industry-Recognized Credentials: Respected in cybersecurity",
-    "Comprehensive Assessments: Rigorous testing of skills",
-    "Continuous Learning: Ongoing development requirements",
-    "Flexible Paths: From foundational to advanced levels"
-  ];
-
+    return '';
+  }).join(' ');
+};
 
 export default function Training() {
+  const [data, setData] = useState<TrainingData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/cybersecurity-awareness-training?populate[tabs][populate][Tabs][populate][0]=CourseOfferings&populate[tabs][populate][Tabs][populate][1]=featuretab1`;
+        const response = await axios.get(apiUrl);
+        setData(response.data.data);
+      } catch (err) {
+        setError('Failed to fetch training data');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Memoized transformed data
+  const transformedData = useMemo(() => {
+    if (!data) return null;
+    
+    const tabs = data.tabs?.Tabs || [];
+    
+    const onlineTab = tabs.find(tab => tab.TabsNumber === "1");
+    const onsiteTab = tabs.find(tab => tab.TabsNumber === "2");
+    const certificationTab = tabs.find(tab => tab.TabsNumber === "3");
+    
+    return {
+      online: {
+        title: onlineTab?.title || "Learn Anytime, Anywhere with AXNESS Online Training",
+        description: onlineTab?.description || "Continuous learning is critical in today's digital environment...",
+        courses: onlineTab?.CourseOfferings?.map(course => ({
+          icon: course.icon ? iconMap[course.icon as keyof typeof iconMap] || null : null,
+          title: course.title,
+          description: getPlainText(course.description)
+        })) || [],
+        features: onlineTab?.featuretab1?.map(item => item.list) || []
+      },
+      onsite: {
+        title: onsiteTab?.title || "Personalized In-Person Cybersecurity Training",
+        description: onsiteTab?.description || "Our immersive onsite sessions are tailored to your organization's needs...",
+        courses: onsiteTab?.CourseOfferings?.map(course => ({
+          icon: course.icon ? iconMap[course.icon as keyof typeof iconMap] || null : null,
+          title: course.title,
+          description: getPlainText(course.description)
+        })) || [],
+        features: onsiteTab?.featuretab1?.map(item => item.list) || []
+      },
+      certification: {
+        title: certificationTab?.title || "Validate Your Cybersecurity Skills",
+        description: certificationTab?.description || "AXNESS certifications demonstrate a commitment to cybersecurity excellence...",
+        courses: certificationTab?.CourseOfferings?.map(course => ({
+          title: course.title,
+          description: getPlainText(course.description)
+        })) || [],
+        features: certificationTab?.featuretab1?.map(item => item.list) || []
+      }
+    };
+  }, [data]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-xl mb-4">{error}</div>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!transformedData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-gray-500 text-xl">No training data available</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-            <section className="py-16 px-4">
+      <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <Tabs defaultValue="online" className="w-full">
             <motion.div
@@ -167,14 +219,14 @@ export default function Training() {
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div>
                     <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-                      Learn Anytime, Anywhere with AXNESS Online Training
+                      {transformedData.online.title}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-8">
-                      Continuous learning is critical in today's digital environment. Our online courses educate employees on the latest cybersecurity best practices with flexible, accessible programs tailored to your organization's needs.
+                      {transformedData.online.description}
                     </p>
                     
                     <div className="space-y-4 mb-8">
-                      {onlineFeatures.map((feature, index) => (
+                      {transformedData.online.features.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
                           <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-full mt-0.5">
                             <CheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -199,7 +251,7 @@ export default function Training() {
                       Course Offerings
                     </h3>
                     <div className="space-y-6">
-                      {onlineCourses.map((course, index) => (
+                      {transformedData.online.courses.map((course, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -208,9 +260,11 @@ export default function Training() {
                           transition={{ delay: index * 0.1 }}
                           className="flex items-start gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm"
                         >
-                          <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-lg">
-                            {course.icon}
-                          </div>
+                          {course.icon && (
+                            <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-lg">
+                              <course.icon className="w-8 h-8 text-red-500" />
+                            </div>
+                          )}
                           <div>
                             <h4 className="font-semibold text-gray-900 dark:text-white">{course.title}</h4>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">{course.description}</p>
@@ -234,14 +288,14 @@ export default function Training() {
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div className="order-2 md:order-1">
                     <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-                      Personalized In-Person Cybersecurity Training
+                      {transformedData.onsite.title}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-8">
-                      Our immersive onsite sessions are tailored to your organization's needs, helping employees understand and apply cybersecurity best practices in their daily work through interactive learning experiences.
+                      {transformedData.onsite.description}
                     </p>
                     
                     <div className="space-y-4 mb-8">
-                      {onsiteFeatures.map((feature, index) => (
+                      {transformedData.onsite.features.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
                           <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-full mt-0.5">
                             <CheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -266,7 +320,7 @@ export default function Training() {
                       Training Offerings
                     </h3>
                     <div className="space-y-6">
-                      {onsiteTrainings.map((training, index) => (
+                      {transformedData.onsite.courses.map((training, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, x: 20 }}
@@ -275,9 +329,11 @@ export default function Training() {
                           transition={{ delay: index * 0.1 }}
                           className="flex items-start gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm"
                         >
-                          <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-lg">
-                            {training.icon}
-                          </div>
+                          {training.icon && (
+                            <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-lg">
+                              <training.icon className="w-8 h-8 text-red-500" />
+                            </div>
+                          )}
                           <div>
                             <h4 className="font-semibold text-gray-900 dark:text-white">{training.title}</h4>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">{training.description}</p>
@@ -301,14 +357,14 @@ export default function Training() {
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                   <div>
                     <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-                      Validate Your Cybersecurity Skills
+                      {transformedData.certification.title}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-8">
-                      AXNESS certifications demonstrate a commitment to cybersecurity excellence and are recognized as a mark of competence in the field. Advance your career or validate your team's skills with our certification programs.
+                      {transformedData.certification.description}
                     </p>
                     
                     <div className="space-y-4 mb-8">
-                      {certificationFeatures.map((feature, index) => (
+                      {transformedData.certification.features.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
                           <div className="bg-red-100 dark:bg-red-900/20 p-2 rounded-full mt-0.5">
                             <CheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -333,7 +389,7 @@ export default function Training() {
                       Certification Programs
                     </h3>
                     <div className="space-y-6">
-                      {certifications.map((cert, index) => (
+                      {transformedData.certification.courses.map((cert, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 20 }}
@@ -345,9 +401,9 @@ export default function Training() {
                           <div className="flex items-start gap-4">
                             <div>
                               <Badge className="bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-300 mb-2">
-                                {cert.title}
+                                Certification
                               </Badge>
-                              <h4 className="font-semibold text-gray-900 dark:text-white">{cert.name}</h4>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">{cert.title}</h4>
                               <p className="text-gray-600 dark:text-gray-400 mt-1">{cert.description}</p>
                             </div>
                           </div>
